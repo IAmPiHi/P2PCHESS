@@ -40,7 +40,7 @@ Position Piece::getPosition() const {
     return position; // 直接回傳物件，安全又簡單
 }
 
-// --- 子類別實作 (例如 Pawn) ---
+// --- PAWN ---
 
 Pawn::Pawn(PieceColor c, int x, int y) 
     : Piece(PieceType::PAWN, c, x, y) {}
@@ -55,6 +55,8 @@ bool Pawn::isValidMove(Position newPos, const std::vector<Piece*>& boardState) {
     // ... (其他實作) ...
     return true; // 暫時回傳
 }
+
+// --- KING ---
 
 King::King(PieceColor c, int x, int y) 
     : Piece(PieceType::KING, c, x, y) {}
