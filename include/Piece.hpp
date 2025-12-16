@@ -1,60 +1,68 @@
-#include <PieceType.hpp>
-int abs(int a)
-{
-    return a<0?-a:a;
-}
-class Position
-{
+#pragma once  
+#include "PieceType.hpp" 
+#include <vector>
+#include <cmath> 
+
+
+class Position {
+private:
     int x;
     int y;
 public:
-    Position(int a=0,int b=0):x(a),y(b){}
-    int getX(){return x;}
-    int getY(){return y;}
-    void setX(int a){x=a;}
-    void setY(int b){y=b;}
-        // 1. 重載 == (可直接判斷)
-    bool operator==(const Position& other) const {
-            return x == other.x && y == other.y;
-        }
+    Position(int a = 0, int b = 0);
+    
+    int getX() const { return x; }
+    int getY() const { return y; }
+    void setX(int a) { x = a; }
+    void setY(int b) { y = b; }
 
-        // 2. 重載 != 
-    bool operator!=(const Position& other) const {
-            return !(*this == other);
-        }
-        
-        
-        // 判斷是否在對角線上 (給主教或皇后用)
-    bool onDiagonal(const Position& other) const {
-            return abs(x - other.x) == abs(y - other.y);
-    }
-    bool onSameLine(const Position& other) const {
-            return x==other.x || y==other.y;
-    }
+    // 運算子重載宣告
+    bool operator==(const Position& other) const;
+    bool operator!=(const Position& other) const;
+
+    // 判斷邏輯宣告
+    bool onDiagonal(const Position& other) const;
+    bool onSameLine(const Position& other) const;
 };
 
-class Piece
-{
-public:
+class Piece {
+protected: 
     PieceType type;
     PieceColor color;
     Position position;
-    bool isAlive=true;
+    bool isAlive;
 
-    Piece(PieceType t = PieceType::NONE, PieceColor c = PieceColor::NONE, int x=0, int y=0) 
-        : type(t), color(c), position(x,y) {}
-
-    void moveTo(int x, int y){
-        position.setX(x);
-        position.setY(y);
+public:
+    Piece(PieceType t, PieceColor c, int x, int y);
     
-    }
+    virtual ~Piece() = default;
 
-    void capture(){
-        isAlive = false;  //you can delete the piece in main process or just mark it as not alive
-    }
+    void moveTo(int x, int y);
+    void capture();
+    
+    bool getAlive() const { return isAlive; }
+    PieceColor getColor() const { return color; }
+    PieceType getType() const { return type; }
+    
+    Position getPosition() const; 
 
-    int* getPosition(){
-        return new int[2]{position.getX(), position.getY()};  //return position as an array 1x 2y
-    }
+    //強迫子類別必須實作
+    virtual bool isValidMove(Position newPos, const std::vector<Piece*>& boardState) = 0;
 };
+
+// --- 子類別宣告 (可以寫在這裡，也可以分開成 Pawn.hpp) ---
+
+class Pawn : public Piece {
+public:
+    Pawn(PieceColor c, int x, int y);
+    
+    bool isValidMove(Position newPos, const std::vector<Piece*>& boardState) override;
+};
+
+class King : public Piece {
+public:
+    King(PieceColor c, int x, int y);
+    bool isValidMove(Position newPos, const std::vector<Piece*>& boardState) override;
+};
+
+//其他棋子類別依此模式繼續添加
