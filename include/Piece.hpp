@@ -50,7 +50,7 @@ public:
     virtual bool isValidMove(Position newPos, const std::vector<Piece*>& boardState) = 0;
 };
 
-// --- 子類別宣告 (可以寫在這裡，也可以分開成 Pawn.hpp) ---
+// --- 子類別宣告 ---
 
 class Pawn : public Piece {
 public:
