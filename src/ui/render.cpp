@@ -1,7 +1,7 @@
 #include "Renderer.hpp"
 #include <iostream>
 
-// 建構子：這裡使用了成員初始化列表 : uiText(font) 這是修復關鍵
+
 Renderer::Renderer() : uiText(font) { 
     // 初始化 TILE_SIZE
     TILE_SIZE = static_cast<float>(WINDOW_SIZE) / BOARD_DIMENSION;
@@ -10,15 +10,15 @@ Renderer::Renderer() : uiText(font) {
     window.create(sf::VideoMode({WINDOW_SIZE, WINDOW_SIZE}), "LAN Chess");
     window.setFramerateLimit(60);
 
-    // --- 載入資源 ---
     
-    // 1. 載入字型
+    
+    // 載入字型
     if (!font.openFromFile("resources/arial.ttf")) {
         std::cerr << "Error: Could not load font from resources/arial.ttf" << std::endl;
     }
-    // uiText 已經在上方綁定 font，這裡不需要再 setFont
+    
 
-    // 2. 載入圖片
+    // 載入圖片
     loadTexture("board", "board.png");
 
     std::string colors[] = {"w", "b"};
@@ -103,7 +103,7 @@ void Renderer::drawPiece(PieceType type, PieceColor color, int gridX, int gridY)
     }
 }
 
-// --- UI 實作 ---
+// --- 大廳UI ---
 
 sf::Vector2i Renderer::getMousePosition() {
     return sf::Mouse::getPosition(window);
